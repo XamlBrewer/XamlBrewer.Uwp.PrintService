@@ -1,0 +1,70 @@
+﻿<Page x:Class="Mvvm.Services.Printing.PrintPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d"
+      Foreground="Black">
+
+    <Grid x:Name="printableArea">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="0" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0"
+              Margin="0 0 0 8">
+            <StackPanel Orientation="Horizontal">
+            <Image Source="ms-appx:///Assets/U2UCWide.jpg"
+                   Height="32" />
+            <TextBlock Text="ItemsControl Printing Sample"
+                       Margin="8 0 0 0"
+                       FontSize="16" VerticalAlignment="Center" />
+            </StackPanel>
+            <TextBlock Name="title"
+                       Foreground="Black"
+                       FontSize="16"
+                       HorizontalAlignment="Right"
+                       Text="" />
+        </Grid>
+
+        <RichTextBlock x:Name="textContent"
+                       FontSize="18"
+                       Grid.Row="1"
+                       Grid.ColumnSpan="2"
+                       OverflowContentTarget="{Binding ElementName=continuationPageLinkedContainer}"
+                       IsTextSelectionEnabled="True"
+                       TextAlignment="Left"
+                       FontFamily="Segoe UI"
+                       VerticalAlignment="Top"
+                       HorizontalAlignment="Left">
+        </RichTextBlock>
+
+        <RichTextBlockOverflow x:Name="continuationPageLinkedContainer"
+                               Grid.Row="2" />
+
+        <!-- Footer -->
+        <Grid Grid.Row="3"
+              Grid.Column="0"
+              Margin="0 8 0 0">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock FontSize="16"
+                           Text="© 2013 by U2U Consult"
+                           VerticalAlignment="Bottom" />
+            </StackPanel>
+            <TextBlock Name="pageNumber"
+                       Foreground="Black"
+                       FontSize="16"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Bottom"
+                       Text="-#-" />
+        </Grid>
+    </Grid>
+</Page>
