@@ -1,9 +1,11 @@
 ﻿using Mvvm;
+using Mvvm.Services.Printing;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Windows.Input;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -19,30 +21,46 @@ namespace XamlBrewer.Uwp.PrintService
 {
     public sealed partial class MainPage : Page
     {
-        private MenuItem resetItem;
+        private PrintServiceProvider printServiceProvider = new PrintServiceProvider();
+        private MenuItem printItem;
+        private DelegateCommand printCommand;
 
         public MainPage()
         {
             this.InitializeComponent();
 
-            resetItem = new MenuItem()
+            printCommand = new DelegateCommand(Print_Executed);
+            printItem = new MenuItem()
             {
-                Glyph = Symbol.Preview,
+                Glyph = Symbol.Page,
                 Text = "Print",
-                Command = (DataContext as MainPageViewModel).PrintCommand
+                Command = printCommand
             };
+
+            this.Loaded += this.MainPage_Loaded;
+        }
+
+        private void Print_Executed()
+        {
+            printServiceProvider.Print();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            (this.DataContext as ViewModelBase).Menu.Add(resetItem);
+            (this.DataContext as ViewModelBase).Menu.Add(printItem);
             base.OnNavigatedTo(e);
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            (this.DataContext as ViewModelBase).Menu.Remove(resetItem);
+            (this.DataContext as ViewModelBase).Menu.Remove(printItem);
+            this.printServiceProvider.UnregisterForPrinting();
             base.OnNavigatedFrom(e);
+        }
+
+        private void MainPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.printServiceProvider.RegisterForPrinting(this, typeof(MainReport), this.DataContext);
         }
     }
 }

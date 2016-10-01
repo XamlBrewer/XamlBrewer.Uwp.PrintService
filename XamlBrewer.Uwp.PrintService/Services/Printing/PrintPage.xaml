@@ -22,9 +22,9 @@
         <Grid Grid.Row="0"
               Margin="0 0 0 8">
             <StackPanel Orientation="Horizontal">
-            <Image Source="ms-appx:///Assets/U2UCWide.jpg"
-                   Height="32" />
-            <TextBlock Text="ItemsControl Printing Sample"
+            <Image Source="ms-appx:///Assets/StoreLogo.png"
+                       Height="32" />
+            <TextBlock Text="XAML Brewer UWP Printing Sample"
                        Margin="8 0 0 0"
                        FontSize="16" VerticalAlignment="Center" />
             </StackPanel>
@@ -56,7 +56,7 @@
               Margin="0 8 0 0">
             <StackPanel Orientation="Horizontal">
                 <TextBlock FontSize="16"
-                           Text="© 2013 by U2U Consult"
+                           Text="© 2016 by XAML Brewer"
                            VerticalAlignment="Bottom" />
             </StackPanel>
             <TextBlock Name="pageNumber"

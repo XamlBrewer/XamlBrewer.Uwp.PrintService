@@ -5,24 +5,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using XamlBrewer.Uwp.PrintService.DataAccessLayer;
+using XamlBrewer.Uwp.PrintService.Models;
 
 namespace XamlBrewer.Uwp.PrintService.ViewModels
 {
     class MainPageViewModel : ViewModelBase
     {
-        private DelegateCommand _printCommand;
-
-        public MainPageViewModel()
+        public List<TypeModel> Types
         {
-            _printCommand = new DelegateCommand(Print_Executed);
+            get { return Dal.GetTypes(); }
         }
 
-        public ICommand PrintCommand
+        public List<CharacterModel> Characters
         {
-            get { return _printCommand; }
+            get { return Dal.GetCharacters(); }
         }
-
-        private void Print_Executed()
-        { }
     }
 }

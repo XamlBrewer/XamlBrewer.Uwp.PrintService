@@ -193,7 +193,7 @@
         private void PrintManager_PrintTaskRequested(PrintManager sender, PrintTaskRequestedEventArgs e)
         {
             PrintTask printTask = null;
-            printTask = e.Request.CreatePrintTask("U2UConsult Printing Sample", sourceRequested =>
+            printTask = e.Request.CreatePrintTask("XAML Brewer UWP Print Sample", sourceRequested =>
             {
                 // Print Task event handler is invoked when the print job is completed.
                 printTask.Completed += async (s, args) =>

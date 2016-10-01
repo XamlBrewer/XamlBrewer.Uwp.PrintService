@@ -1,4 +1,4 @@
-﻿<Page x:Class="XamlBrewer.Uwp.PrintService.MainPage"
+﻿<Page x:Class="XamlBrewer.Uwp.PrintService.MainReport"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:local="using:XamlBrewer.Uwp.PrintService"
@@ -7,22 +7,11 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       mc:Ignorable="d">
 
-    <Page.DataContext>
-        <vm:MainPageViewModel />
-    </Page.DataContext>
-
-    <Grid>
-        <!-- Required for the print service provider -->
-        <Canvas x:Name="printingRoot"
-                Opacity="0"
-                Margin="-2000 0 0 0" />
-
-        <!-- Actual Page Content -->
-        <ScrollViewer VerticalScrollMode="Auto">
-            <StackPanel Orientation="Vertical"
-                        Background="{ThemeResource PageBackgroundBrush}">
-                <GridView ItemsSource="{Binding Types}">
-                    <GridView.ItemTemplate>
+    <RichTextBlock>
+        <Paragraph>
+            <InlineUIContainer>
+                <ItemsControl ItemsSource="{Binding Types}">
+                    <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Text="{Binding Name}" />
@@ -30,13 +19,16 @@
                                            TextWrapping="WrapWholeWords" />
                             </StackPanel>
                         </DataTemplate>
-                    </GridView.ItemTemplate>
-                </GridView>
-                <GridView ItemsSource="{Binding Characters}">
-                    <GridView.ItemTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </InlineUIContainer>
+        </Paragraph>
+        <Paragraph>
+            <InlineUIContainer>
+                <ItemsControl ItemsSource="{Binding Characters}">
+                    <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Grid Width="400"
-                                  Height="400">
+                            <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="100" />
                                     <ColumnDefinition Width="*" />
@@ -50,12 +42,10 @@
                                        Grid.RowSpan="3" />
                                 <TextBlock Text="{Binding Name}"
                                            Grid.Column="1" />
-                                <ScrollViewer VerticalScrollMode="Auto"
-                                              Grid.Column="1"
-                                              Grid.Row="1">
-                                    <TextBlock Text="{Binding Description}"
-                                               TextWrapping="WrapWholeWords" />
-                                </ScrollViewer>
+                                <TextBlock Text="{Binding Description}"
+                                           TextWrapping="WrapWholeWords"
+                                           Grid.Column="1"
+                                           Grid.Row="1" />
                                 <TextBlock Text="{Binding PrimaryComicTrait}"
                                            TextAlignment="Right"
                                            TextWrapping="WrapWholeWords"
@@ -64,9 +54,9 @@
                                            Grid.Row="2" />
                             </Grid>
                         </DataTemplate>
-                    </GridView.ItemTemplate>
-                </GridView>
-            </StackPanel>
-        </ScrollViewer>
-    </Grid>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </InlineUIContainer>
+        </Paragraph>
+    </RichTextBlock>
 </Page>
