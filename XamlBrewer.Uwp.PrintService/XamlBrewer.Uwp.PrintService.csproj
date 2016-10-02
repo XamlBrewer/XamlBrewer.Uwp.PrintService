@@ -124,6 +124,20 @@
     <None Include="XamlBrewer.Uwp.PrintService_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Characters\arlecchino.jpg" />
+    <Content Include="Assets\Characters\brighella.jpg" />
+    <Content Include="Assets\Characters\capitano.jpg" />
+    <Content Include="Assets\Characters\colombina.jpg" />
+    <Content Include="Assets\Characters\coviello.jpg" />
+    <Content Include="Assets\Characters\dottore.jpg" />
+    <Content Include="Assets\Characters\mezzetino.jpg" />
+    <Content Include="Assets\Characters\pagliacchio.jpg" />
+    <Content Include="Assets\Characters\pantalone.jpg" />
+    <Content Include="Assets\Characters\pulcinella.jpg" />
+    <Content Include="Assets\Characters\ruffiana.jpg" />
+    <Content Include="Assets\Characters\scapino.jpg" />
+    <Content Include="Assets\Characters\scaramouche.jpg" />
+    <Content Include="Assets\Characters\tartaglia.jpg" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -160,9 +174,7 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Assets\Characters\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <SDKReference Include="WindowsMobile, Version=10.0.14393.0">
       <Name>Windows Mobile Extensions for the UWP</Name>
