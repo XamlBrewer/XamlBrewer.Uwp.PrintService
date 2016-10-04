@@ -8,6 +8,16 @@
       mc:Ignorable="d">
 
     <RichTextBlock>
+        <Paragraph TextAlignment="Right">
+            <Run Text="La Commedia dell'arte"
+                 Foreground="{StaticResource TitlebarBackgroundBrush}"
+                 FontSize="28" />
+        </Paragraph>
+        <Paragraph>
+            <LineBreak />
+            <Run Text="Types"
+                 FontSize="20" />
+        </Paragraph>
         <Paragraph>
             <InlineUIContainer>
                 <ItemsControl ItemsSource="{Binding Types}"
@@ -16,6 +26,7 @@
                         <DataTemplate>
                             <RichTextBlock>
                                 <Paragraph>
+                                    <LineBreak />
                                     <Run Text="{Binding Name}"
                                          FontSize="16"
                                          FontWeight="Bold" />
@@ -29,36 +40,53 @@
             </InlineUIContainer>
         </Paragraph>
         <Paragraph>
+            <LineBreak />
+            <Run Text="Characters"
+                 FontSize="20" />
+            <LineBreak />
+        </Paragraph>
+        <Paragraph>
             <InlineUIContainer>
-                <ItemsControl ItemsSource="{Binding Characters}"
-                              Margin="0">
+                <ItemsControl ItemsSource="{Binding Characters}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <RichTextBlock>
-                                <Paragraph>
-                                    <InlineUIContainer>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Border BorderThickness="2"
-                                                    BorderBrush="{StaticResource SplitViewBackgroundBrush}"
-                                                    Width="100"
-                                                    VerticalAlignment="Top"
-                                                    Margin="0 10 10 10">
-                                                <Image Source="{Binding Image}" />
-                                            </Border>
-                                            <TextBlock Text="{Binding Name}"
-                                                       FontSize="16"
-                                                       FontWeight="Bold"
-                                                       VerticalAlignment="Bottom"
-                                                       Margin="10" />
-                                        </StackPanel>
-                                    </InlineUIContainer>
-                                    <LineBreak />
-                                    <Run Text="{Binding Description}" />
-                                    <LineBreak />
-                                    <Run Text="{Binding PrimaryComicTrait}"
-                                         FontWeight="SemiBold" />
-                                </Paragraph>
-                            </RichTextBlock>
+                            <!-- Any MaxHeight will help. -->
+                            <Grid MaxHeight="7000">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="120" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="auto" />
+                                </Grid.RowDefinitions>
+                                <Border BorderThickness="2"
+                                        BorderBrush="{StaticResource SplitViewBackgroundBrush}"
+                                        Width="100"
+                                        VerticalAlignment="Top"
+                                        Grid.Row="1"
+                                        Margin="10">
+                                    <Image Source="{Binding Image}" />
+                                </Border>
+                                <TextBlock Text="{Binding Name}"
+                                           FontSize="16"
+                                           FontWeight="Bold"
+                                           Grid.ColumnSpan="2" />
+                                <TextBlock Text="{Binding Description}"
+                                           TextWrapping="WrapWholeWords"
+                                           TextTrimming="CharacterEllipsis"
+                                           Margin="10"
+                                           Grid.Column="1"
+                                           Grid.Row="1" />
+                                <TextBlock Text="{Binding PrimaryComicTrait}"
+                                           TextAlignment="Right"
+                                           TextWrapping="WrapWholeWords"
+                                           FontWeight="SemiBold"
+                                           Margin="10 0 10 10"
+                                           Grid.ColumnSpan="2"
+                                           Grid.Row="2" />
+                            </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

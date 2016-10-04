@@ -27,14 +27,14 @@
         private int pageNumber;
 
         /// <summary>
-        /// The percent of margin width, content is set at 80% (0.8) of the page's width
+        /// The percent of margin width, content is set at 90% of the page's width
         /// </summary>
-        private double HorizontalPrintMargin = 0.1;
+        private double HorizontalPrintMargin = 0.05;
 
         /// <summary>
-        /// The percent of margin height, content is set at 94% (0.94) of the page's height
+        /// The percent of margin height, content is set at 95% of the page's height
         /// </summary>
-        private double VerticalPrintMargin = 0.03;
+        private double VerticalPrintMargin = 0.025;
 
         /// <summary>
         /// PrintDocument is used to prepare the pages for printing.
@@ -414,6 +414,7 @@
             PrintingRoot.Children.Add(firstPage);
         }
 
+        // Renders a single paragraph.
         private double Render(Paragraph paragraph)
         {
             var measureRtb = new RichTextBlock();
