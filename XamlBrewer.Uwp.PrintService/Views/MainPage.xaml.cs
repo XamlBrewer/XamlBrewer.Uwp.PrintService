@@ -2,6 +2,7 @@
 using Mvvm.Services.Printing;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -37,17 +38,24 @@ namespace XamlBrewer.Uwp.PrintService
                 Command = printCommand
             };
 
-            this.Loaded += this.MainPage_Loaded;
+            this.printServiceProvider.StatusChanged += PrintServiceProvider_StatusChanged;
+        }
+
+        private void PrintServiceProvider_StatusChanged(object sender, PrintServiceEventArgs e)
+        {
+            Debug.WriteLine("PrintService: " + e.Message);
         }
 
         private void Print_Executed()
         {
+            this.printServiceProvider.RegisterForPrinting(this, typeof(MainReport), this.DataContext);
             printServiceProvider.Print();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             (this.DataContext as ViewModelBase).Menu.Add(printItem);
+         
             base.OnNavigatedTo(e);
         }
 
@@ -56,11 +64,6 @@ namespace XamlBrewer.Uwp.PrintService
             (this.DataContext as ViewModelBase).Menu.Remove(printItem);
             this.printServiceProvider.UnregisterForPrinting();
             base.OnNavigatedFrom(e);
-        }
-
-        private void MainPage_Loaded(object sender, RoutedEventArgs e)
-        {
-            this.printServiceProvider.RegisterForPrinting(this, typeof(MainReport), this.DataContext);
         }
     }
 }

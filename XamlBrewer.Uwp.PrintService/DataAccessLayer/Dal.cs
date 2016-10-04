@@ -46,34 +46,10 @@ namespace XamlBrewer.Uwp.PrintService.DataAccessLayer
 
             result.Add(new CharacterModel()
             {
-                Name = "Burrattino; or Burattino or Burratino.",
-                Description = "One of the zanni, with an extremely good nature -- obviously trustworthy enough that in Fortunata Isabella, the inamorata chooses him as her sole companion on a cross-country trip. He's not usually shown to be particularly smart, and he, like many zanni, is often inclined toward gluttony and lust. He is easily brought to tears by any kind of bad news (such as discovering he's eaten all the macaroni) and can lament these things at length. Illustrations show his costume to be a slightly baggy shirt and pants, decorated with small bows or ribbons, and wearing a collar. His hat is a kind of flat-cap with a narrow brim. The name Burrattino means little-donkey. A modern version of Burrattino can be found in the character of Burton 'Gus' Guster on the show Psych.",
-                PrimaryComicTrait = "Soft-hearted to excess.",
-                ImagePath = "Assets/Droids/"
-            });
-
-            result.Add(new CharacterModel()
-            {
                 Name = "Captain; or Capitano.",
                 Description = "Unusually, the character of the Captain can fall into both the zanni and the vecchi categories, and can even fill the part of the inamorato on occasion. He is opportunistic and greedy, and in many scenari he is revealed to have never been a captain at all; and if he does have legitimate claim to the title he only earned it through deception and bravado. The other characters may or may not be fooled by his claims, depending on the needs of the story. He usually wears a fancy version of a period military uniform, and may or may not have a mask. If he is masked, it is usually flesh-colored with a long nose and mustache that turns up at the corners. He also is frequently portrayed as wearing glasses -- in past times these would have been a fashion accessory, akin to sunglasses today. He is usually played as being an extreme coward behind his bravado, though once in a while the character is known to demonstrate true courage; nevertheless, even when he does, it is so ineptly applied that his action is still a miserable failure. A modern example of a character in the style of the Captain is the title role of the show Invader Zim, an arrogant and exceedingly self-centered alien who earned a high military ranking simply because his superiors wanted to put him “in charge” of the most distant planet they could think of, so they'd never have to see him again.",
                 PrimaryComicTrait = "Egotism and megalomania.",
                 ImagePath = "Assets/Characters/capitano.jpg"
-            });
-
-            result.Add(new CharacterModel()
-            {
-                Name = "Cietrulo; or Cetrulllo.",
-                Description = "Not a well-documented character, he turns up in the early 17th century Feather-Book of Dionisio Minaggio. The illustration shows the character to bear a strong resemblance to Scaramouch, and so is likely a variant on either him or on the Captain, and this is further supported in that the illustration appears to portray him threatening to pull his sword on another zanni; but Allardyce Nicoll in his book The World of Harlequin speculates he might be a variant on the character Coviello. The name Cietrulo is clearly meant to be a play on the Italian word citrulo, which means idiot, and gives some more insight as to the character's personality. He is apparently an unmasked character, but with such a name is definitely a zanni or a vecchio, rather than an inamorato.",
-                PrimaryComicTrait = "Probably a short temper; see also Captain, Scaramouch, and Coviello.",
-                ImagePath = "Assets/Droids/"
-            });
-
-            result.Add(new CharacterModel()
-            {
-                Name = "Cola; or Colafronio.",
-                Description = "Usually a zanni, but sometimes classed as a vecchio and occasionally even an inamorato; he is depicted as well-dressed and wearing glasses, suggesting he might be a variant on the Captain, who has similar versatility. See also: Pasquariello.",
-                PrimaryComicTrait = "",
-                ImagePath = "Assets/Droids/"
             });
 
             result.Add(new CharacterModel()
@@ -102,34 +78,10 @@ namespace XamlBrewer.Uwp.PrintService.DataAccessLayer
 
             result.Add(new CharacterModel()
             {
-                Name = "Franceschina; or Francesquina.",
-                Description = "A soubrette, with a particularly libidinous nature. She's a bit too skanky to come off as truly sexy, but she's good enough for the likes of most zanni and vecchi. If she's unmarried, she doesn't care; and if she's married, she still doesn't care. A series of illustrations from the Recueil Fossard show her with a rather Rubenesque figure, gushing out of her corset and with the spiral lacing on her dress ready to burst. Her costume is of a low-class servant.",
-                PrimaryComicTrait = "Slut.",
-                ImagePath = "Assets/Droids/"
-            });
-
-            result.Add(new CharacterModel()
-            {
-                Name = "Geronte; or Gerontes.",
-                Description = "A French version of Pantalone. Though still old, he is usually portrayed as less mean or miserly and instead more ignorant or naive. 19th century costume designs show him as an old man dressed as a gentleman of the late 17th or early 18th century, but with flamboyantly bright red rolled stockings and a variety of unfashionable hats. He does not appear to wear a mask. His name is from a Greek word meaning elder or old man. ",
-                PrimaryComicTrait = "Ignorance/stupidity.",
-                ImagePath = "Assets/Droids/"
-            });
-
-            result.Add(new CharacterModel()
-            {
                 Name = "Harlequin; or Arlequin or Arlecchino.",
                 Description = "Perhaps the most popular and definitely best-known of the commedia characters. There are many dubious etymologies of his name, often linking him to mythical beings or spirits, but no one can say for sure whence the word originates. My own best guess, based on information available to me, is that it comes from Frankish karalchin, or 'little man' (cognate to the names Karl and Charles.) Harlequin's early costume was a kind of unitard or jumpsuit decorated with patches, meant to indicate a garment so ragged it was more patches than real material. Over time it evolved into the diamond or triangle pattern that has come to distinguish him. Later versions show him in a two-piece outfit made from a shirt and pants. Interestingly, his outfit has always been belted around the hips, instead of at the waist. Harlequin is traditionally portrayed by a physically agile actor and makes use of slapstick and stunts. His character is often not particularly bright though the extremes to which this is taken vary by the scenario. He wears a dark brown or black colored mask, sometimes with a beard or mustache attached. Old style Harlequins often wore a hat made from a dead animal, though from the eighteenth century on a bicorn or tricorn hat has become traditional. Another attribute of Harlequin is a wooden prop -- usually a wooden sword or a wooden stick (originally a slapstick, but later evolutions show it as just a walking stick or cane.) ",
                 PrimaryComicTrait = "Making a nuisance of himself. ",
                 ImagePath = "Assets/Characters/arlecchino.jpg"
-            });
-
-            result.Add(new CharacterModel()
-            {
-                Name = "Magnifico.",
-                Description = "A variant of Pantalone, popular in the late 16th/early 17th centuries. Whereas Pantalone is usually of the merchant class, Magnifico is more likely to be an elected official or aristocrat, but on the whole there is no significant difference between the two characters.",
-                PrimaryComicTrait = "His name suggests grace, generosity and command, all of which he lacks. See also: Pantalone.",
-                ImagePath = "Assets/Droids/"
             });
 
             result.Add(new CharacterModel()
@@ -146,14 +98,6 @@ namespace XamlBrewer.Uwp.PrintService.DataAccessLayer
                 Description = "A vecchio, and one of the older characters of the commedia, both historically and in canon. In fact, the older the show states Pantalone's age to be, the better. He is usually portrayed as being of the merchant class though he may or may not be wealthy; if he is, it doesn't matter as he's usually so averse to spending any of his money that his lifestyle is almost that of a beggar. His costume consists of pants and a shirt or else a jumpsuit, usually red in color, with a long black coat or a cape thrown over. His mask is meant to portray an ancient old man, very wrinkled, with a large, long nose. Pantalone's traditional costume of long trousers, which was his attribute even before such garments were fashionably worn, resulted in the term “pants” “pantaloons” and so on becoming the name for such garments. His actual name may be from Greek Pantaleon, a clown mentioned by the ancient author Athenaeus, suggesting his origins to be quite old indeed. Modern Pantalone-like characters include Mr. Burns on The Simpsons (whose face is even drawn in such a way as to resemble Pantalone's mask) and Robert 'Granddad' Freeman on Boondocks.",
                 PrimaryComicTrait = "Greed and stinginess -- usually of money but can apply it to women, power, food, or whatever else captures his fancy.",
                 ImagePath = "Assets/Characters/pantalone.jpg"
-            });
-
-            result.Add(new CharacterModel()
-            {
-                Name = "Pasquariello, Paschiarello; or Pasquariel.",
-                Description = "A Capitano variant, usually a zanni but sometimes a vecchio or inamorato. His costume is shown as a tabaro, jacket, and breeches with decorative garters. On his head appears to be a skullcap, and he looks to be unmasked. Later versions replace the tabaro with a clown-collar and add stripes to the design. Had acrobatic tendencies.",
-                PrimaryComicTrait = "",
-                ImagePath = "Assets/Droids/"
             });
 
             result.Add(new CharacterModel()

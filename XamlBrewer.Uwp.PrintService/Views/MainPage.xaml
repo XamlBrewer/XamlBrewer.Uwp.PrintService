@@ -21,24 +21,31 @@
         <ScrollViewer VerticalScrollMode="Auto">
             <StackPanel Orientation="Vertical"
                         Background="{ThemeResource PageBackgroundBrush}">
-                <GridView ItemsSource="{Binding Types}">
+                <GridView ItemsSource="{Binding Types}"
+                          Margin="10">
                     <GridView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Vertical">
-                                <TextBlock Text="{Binding Name}" />
+                                <TextBlock Text="{Binding Name}"
+                                           Foreground="{StaticResource TitlebarBackgroundBrush}"
+                                           FontSize="16"
+                                           FontWeight="Bold"
+                                           Margin="10" />
                                 <TextBlock Text="{Binding Description}"
-                                           TextWrapping="WrapWholeWords" />
+                                           TextWrapping="WrapWholeWords"
+                                           Margin="10" />
                             </StackPanel>
                         </DataTemplate>
                     </GridView.ItemTemplate>
                 </GridView>
-                <GridView ItemsSource="{Binding Characters}">
+                <GridView ItemsSource="{Binding Characters}"
+                          Margin="10">
                     <GridView.ItemTemplate>
                         <DataTemplate>
                             <Grid Width="400"
                                   Height="400">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="120" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
@@ -46,22 +53,31 @@
                                     <RowDefinition Height="*" />
                                     <RowDefinition Height="auto" />
                                 </Grid.RowDefinitions>
-                                <Image Source="{Binding Image}"
-                                       Width="100"
-                                       VerticalAlignment="Top"
-                                       Grid.Row="1" />
+                                <Border BorderThickness="2"
+                                        BorderBrush="{StaticResource SplitViewBackgroundBrush}"
+                                        Width="100"
+                                        VerticalAlignment="Top"
+                                        Grid.Row="1"
+                                        Margin="10">
+                                    <Image Source="{Binding Image}" />
+                                </Border>
                                 <TextBlock Text="{Binding Name}"
+                                           Foreground="{StaticResource TitlebarBackgroundBrush}"
+                                           FontSize="16"
+                                           FontWeight="Bold"
                                            Grid.ColumnSpan="2" />
-                                <ScrollViewer VerticalScrollMode="Auto"
-                                              Grid.Column="1"
-                                              Grid.Row="1">
-                                    <TextBlock Text="{Binding Description}"
-                                               TextWrapping="WrapWholeWords" />
-                                </ScrollViewer>
+                                <TextBlock Text="{Binding Description}"
+                                           TextWrapping="WrapWholeWords"
+                                           TextTrimming="WordEllipsis"
+                                           Margin="10"
+                                           Grid.Column="1"
+                                           Grid.Row="1" />
                                 <TextBlock Text="{Binding PrimaryComicTrait}"
                                            TextAlignment="Right"
                                            TextWrapping="WrapWholeWords"
+                                           Foreground="{StaticResource SplitViewBackgroundBrush}"
                                            FontWeight="SemiBold"
+                                           Margin="10 0 10 10"
                                            Grid.ColumnSpan="2"
                                            Grid.Row="2" />
                             </Grid>

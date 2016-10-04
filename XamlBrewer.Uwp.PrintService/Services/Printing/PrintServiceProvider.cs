@@ -127,16 +127,9 @@
             // Create a PrintManager and add a handler for printing initialization.
             PrintManager printMan = PrintManager.GetForCurrentView();
 
-            try
-            {
-                printMan.PrintTaskRequested += PrintManager_PrintTaskRequested;
-                this.OnStatusChanged(new PrintServiceEventArgs("Registered successfully."));
-            }
-            catch (InvalidOperationException)
-            {
-                // Probably already registered.
-                this.OnStatusChanged(new PrintServiceEventArgs("You were already registered."));
-            }
+            printMan.PrintTaskRequested -= PrintManager_PrintTaskRequested;
+            printMan.PrintTaskRequested += PrintManager_PrintTaskRequested;
+            this.OnStatusChanged(new PrintServiceEventArgs("Registered successfully."));
         }
 
         /// <summary>
