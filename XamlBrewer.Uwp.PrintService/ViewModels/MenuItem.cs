@@ -6,38 +6,35 @@ namespace Mvvm
 {
     class MenuItem : BindableBase
     {
-        private Symbol glyph;
-        private string text;
-        private DelegateCommand command;
-        private Type navigationDestination;
+        private Symbol _glyph;
+        private string _text;
+        private DelegateCommand _command;
+        private Type _navigationDestination;
 
         public Symbol Glyph
         {
-            get { return glyph; }
-            set { SetProperty(ref glyph, value); }
+            get { return _glyph; }
+            set { SetProperty(ref _glyph, value); }
         }
 
         public string Text
         {
-            get { return text; }
-            set { SetProperty(ref text, value); }
+            get { return _text; }
+            set { SetProperty(ref _text, value); }
         }
 
         public ICommand Command
         {
-            get { return command; }
-            set { SetProperty(ref command, (DelegateCommand)value); }
+            get { return _command; }
+            set { SetProperty(ref _command, (DelegateCommand)value); }
         }
 
         public Type NavigationDestination
         {
-            get { return navigationDestination; }
-            set { SetProperty(ref navigationDestination, value); }
+            get { return _navigationDestination; }
+            set { SetProperty(ref _navigationDestination, value); }
         }
 
-        public bool IsNavigation
-        {
-            get { return navigationDestination != null; }
-        }
+        public bool IsNavigation => _navigationDestination != null;
     }
 }

@@ -99,7 +99,9 @@
     <Compile Include="Models\TypeModel.cs" />
     <Compile Include="Mvvm\BindableBase.cs" />
     <Compile Include="Mvvm\DelegateCommand.cs" />
-    <Compile Include="Services\Printing\PrintPage.xaml.cs" />
+    <Compile Include="Services\Printing\PrintPage.xaml.cs">
+        <DependentUpon>PrintPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Services\Printing\PrintServiceEventArgs.cs" />
     <Compile Include="Services\Printing\PrintServiceProvider.cs" />
     <Compile Include="Services\Theming\Theme.cs" />
@@ -115,7 +117,9 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\Shell.xaml.cs" />
+    <Compile Include="Views\Shell.xaml.cs">
+        <DependentUpon>Shell.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

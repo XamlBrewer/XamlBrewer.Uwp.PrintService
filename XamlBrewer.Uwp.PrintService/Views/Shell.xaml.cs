@@ -6,11 +6,11 @@ using Windows.UI.Xaml.Input;
 
 namespace XamlBrewer.Uwp.PrintService
 {
-    public sealed partial class Shell : Page
+    public sealed partial class Shell
     {
         public Shell()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
             // Navigate to the first page.
             // var type = (DataContext as ShellViewModel).Menu.First().NavigationDestination;
@@ -23,7 +23,7 @@ namespace XamlBrewer.Uwp.PrintService
             if (e.AddedItems.Count > 0)
             {
                 var menuItem = e.AddedItems.First() as MenuItem;
-                if (menuItem.IsNavigation)
+                if (menuItem != null && menuItem.IsNavigation)
                 {
                     SplitViewFrame.Navigate(menuItem.NavigationDestination);
                 }
@@ -35,7 +35,7 @@ namespace XamlBrewer.Uwp.PrintService
         {
             var menuItem = e.ClickedItem as MenuItem;
 
-            if (!menuItem.IsNavigation)
+            if (menuItem != null && !menuItem.IsNavigation)
             {
                 menuItem.Command.Execute(null);
             }

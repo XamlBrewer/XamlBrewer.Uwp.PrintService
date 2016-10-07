@@ -9,7 +9,7 @@
 
         public PrintServiceEventArgs(string message)
         {
-            this.Message = message;
+            Message = message;
         }
 
         /// <summary>

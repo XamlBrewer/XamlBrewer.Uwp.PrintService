@@ -1,6 +1,4 @@
-﻿using System;
-using System.Globalization;
-using Windows.Foundation.Metadata;
+﻿using Windows.Foundation.Metadata;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;

@@ -1,12 +1,10 @@
-﻿using Windows.UI.Xaml.Controls;
-
-namespace XamlBrewer.Uwp.PrintService
+﻿namespace XamlBrewer.Uwp.PrintService
 {
-    public sealed partial class MainReport : Page
+    public sealed partial class MainReport
     {
         public MainReport()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
     }
 }

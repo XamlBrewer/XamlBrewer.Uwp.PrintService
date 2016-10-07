@@ -4,7 +4,6 @@
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Windows.Input;
-    using Windows.UI.Xaml.Input;
 
     internal class DelegateCommand : ICommand
     {
@@ -33,7 +32,7 @@
         {
             if (execute == null)
             {
-                throw new ArgumentNullException("execute");
+                throw new ArgumentNullException(nameof(execute));
             }
 
             _execute = execute;
@@ -52,11 +51,7 @@
             Justification = "This cannot be an event")]
         public void RaiseCanExecuteChanged()
         {
-            var handler = CanExecuteChanged;
-            if (handler != null)
-            {
-                handler(this, EventArgs.Empty);
-            }
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -67,7 +62,7 @@
         [DebuggerStepThrough]
         public bool CanExecute(object parameter)
         {
-            return _canExecute == null ? true : _canExecute();
+            return _canExecute == null || _canExecute();
         }
 
         /// <summary>

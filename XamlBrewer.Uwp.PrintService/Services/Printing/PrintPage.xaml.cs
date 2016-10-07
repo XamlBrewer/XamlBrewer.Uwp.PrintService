@@ -1,24 +1,27 @@
-﻿namespace Mvvm.Services.Printing
+﻿using System;
+
+namespace Mvvm.Services.Printing
 {
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Documents;
 
-    public sealed partial class PrintPage : Page
+    public sealed partial class PrintPage
     {
         public PrintPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         public PrintPage(RichTextBlockOverflow textLinkContainer)
             : this()
         {
+            if (textLinkContainer == null) throw new ArgumentNullException(nameof(textLinkContainer));
             textLinkContainer.OverflowContentTarget = continuationPageLinkedContainer;
         }
 
         internal void AddContent(Paragraph block)
         {
-            this.textContent.Blocks.Add(block);
+            textContent.Blocks.Add(block);
         }
     }
 }
