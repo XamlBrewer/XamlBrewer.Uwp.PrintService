@@ -1,4 +1,6 @@
-﻿namespace Mvvm.Services.Printing
+﻿using System.Diagnostics.Tracing;
+
+namespace Mvvm.Services.Printing
 {
     using System;
     using System.Collections.Generic;
@@ -9,8 +11,14 @@
     using Windows.UI.Xaml.Documents;
     using Windows.UI.Xaml.Printing;
 
-    public class PrintServiceProvider : Page
+    public partial class PrintServiceProvider : Page
     {
+        /// <summary>
+        /// PrintDocument is used to prepare the pages for printing.
+        /// Prepare the pages to print in the handlers for the Paginate, GetPreviewPage, and AddPages events.
+        /// </summary>
+        private PrintDocument _printDocument;
+
         /// <summary>
         /// The app page that calls the print service.
         /// </summary>
@@ -37,17 +45,6 @@
         private double _verticalPrintMargin = 0.025;
 
         /// <summary>
-        /// PrintDocument is used to prepare the pages for printing.
-        /// Prepare the pages to print in the handlers for the Paginate, GetPreviewPage, and AddPages events.
-        /// </summary>
-        private PrintDocument _printDocument;
-
-        /// <summary>
-        /// Marker interface for document source
-        /// </summary>
-        private IPrintDocumentSource _printDocumentSource;
-
-        /// <summary>
         /// A list of UIElements used to store the print preview pages.  This gives easy access
         /// to any desired preview page.
         /// </summary>
@@ -68,13 +65,6 @@
         public event EventHandler<PrintServiceEventArgs> StatusChanged;
 
         /// <summary>
-        /// Print service provider.
-        /// </summary>
-        public PrintServiceProvider()
-        {
-        }
-
-        /// <summary>
         /// The title of the document, will be printed in the header.
         /// </summary>
         public string Title { get; set; } = string.Empty;
@@ -82,13 +72,7 @@
         /// <summary>
         ///  Printing root canvas on the calling page.
         /// </summary>
-        private Canvas PrintingRoot
-        {
-            get
-            {
-                return _callingPage.FindName("printingRoot") as Canvas;
-            }
-        }
+        private Canvas PrintingRoot => _callingPage.FindName("printingRoot") as Canvas;
 
         /// <summary>
         /// Registers the app for printing with Windows and sets up the necessary event handlers for the print process.
@@ -99,7 +83,7 @@
 
             if (PrintingRoot == null)
             {
-                OnStatusChanged(new PrintServiceEventArgs("The calling page has no PrintingRoot Canvas."));
+                OnStatusChanged("The calling page has no PrintingRoot Canvas.", EventLevel.Error);
                 return;
             }
 
@@ -129,7 +113,7 @@
 
             printMan.PrintTaskRequested -= PrintManager_PrintTaskRequested;
             printMan.PrintTaskRequested += PrintManager_PrintTaskRequested;
-            OnStatusChanged(new PrintServiceEventArgs("Registered successfully."));
+            OnStatusChanged("Registered successfully.");
         }
 
         /// <summary>
@@ -158,17 +142,17 @@
         public async void Print()
         {
             // Notify Caller
-            OnStatusChanged(new PrintServiceEventArgs("Opening Print Dialog."));
+            OnStatusChanged("Opening Print Dialog.");
 
             try
             {
                 await PrintManager.ShowPrintUIAsync();
-                OnStatusChanged(new PrintServiceEventArgs("")); // Print dialog open, but there's no close event handler
+                OnStatusChanged("Print Dialog opened.");
             }
             catch (Exception)
             {
-                // you get here if you didn't register for print.
-                OnStatusChanged(new PrintServiceEventArgs("Did you forget to register?"));
+                // You get here if you didn't register for print.
+                OnStatusChanged("Attempt to open Print Dialog without registering first.", EventLevel.Error);
             }
         }
 
@@ -180,97 +164,14 @@
             StatusChanged?.Invoke(this, e);
         }
 
-        /// <summary>
-        /// This is the event handler for PrintManager.PrintTaskRequested.
-        /// </summary>
-        private void PrintManager_PrintTaskRequested(PrintManager sender, PrintTaskRequestedEventArgs e)
+        protected virtual void OnStatusChanged(string message)
         {
-            PrintTask printTask = null;
-            printTask = e.Request.CreatePrintTask("XAML Brewer UWP Print Sample", sourceRequested =>
-            {
-                // Print Task event handler is invoked when the print job is completed.
-                printTask.Completed += async (s, args) =>
-                {
-                    // Notify the user when the print operation fails.
-                    if (args.Completion == PrintTaskCompletion.Failed)
-                    {
-                        await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-                        {
-                            OnStatusChanged(new PrintServiceEventArgs("Sorry, failed to print."));
-                        });
-                    }
-                };
-
-                sourceRequested.SetSource(_printDocumentSource);
-            });
+            OnStatusChanged(new PrintServiceEventArgs(message));
         }
 
-        /// <summary>
-        /// This is the event handler for PrintDocument.Paginate. It creates print preview pages for the app.
-        /// </summary>
-        private void PrintDocument_Paginate(object sender, PaginateEventArgs e)
+        protected virtual void OnStatusChanged(string message, EventLevel level)
         {
-            // Clear the cache of preview pages
-            _printPreviewPages.Clear();
-            _pageNumber = 0;
-
-            // Clear the printing root of preview pages
-            PrintingRoot.Children.Clear();
-
-            // Get the PrintTaskOptions
-            var printingOptions = e.PrintTaskOptions;
-
-            // Get the page description to deterimine how big the page is
-            PrintPageDescription pageDescription = printingOptions.GetPageDescription(0);
-
-            // This variable keeps track of the last RichTextBlockOverflow element that was added to a page which will be printed
-            // We know there is at least one page to be printed. passing null as the first parameter to
-            // AddOnePrintPreviewPage tells the function to add the first page.
-            var lastOverflow = AddOnePrintPreviewPage(null, pageDescription);
-
-            // We know there are more pages to be added as long as the last RichTextBoxOverflow added to a print preview
-            // page has extra content
-            while (lastOverflow.HasOverflowContent && lastOverflow.Visibility == Visibility.Visible)
-            {
-                lastOverflow = AddOnePrintPreviewPage(lastOverflow, pageDescription);
-            }
-
-            var printDoc = (PrintDocument)sender;
-
-            // Report the number of preview pages created
-            printDoc.SetPreviewPageCount(_printPreviewPages.Count, PreviewPageCountType.Intermediate);
-        }
-
-        /// <summary>
-        /// This is the event handler for PrintDocument.GetPrintPreviewPage. It provides a specific print preview page,
-        /// in the form of an UIElement, to an instance of PrintDocument. PrintDocument subsequently converts the UIElement
-        /// into a page that the Windows print system can deal with.
-        /// </summary>
-        private void PrintDocument_GetPrintPreviewPage(object sender, GetPreviewPageEventArgs e)
-        {
-            var printDoc = (PrintDocument)sender;
-
-            printDoc.SetPreviewPage(e.PageNumber, _printPreviewPages[e.PageNumber - 1]);
-        }
-
-        /// <summary>
-        /// This is the event handler for PrintDocument.AddPages. It provides all pages to be printed, in the form of
-        /// UIElements, to an instance of PrintDocument. PrintDocument subsequently converts the UIElements
-        /// into a pages that the Windows print system can deal with.
-        /// </summary>
-        private void PrintDocument_AddPages(object sender, AddPagesEventArgs e)
-        {
-            // Loop over all of the preview pages and add each one to  add each page to be printied
-            foreach (var previewPage in _printPreviewPages)
-            {
-                // We should have all pages ready at this point...
-                _printDocument.AddPage(previewPage);
-            }
-
-            var printDoc = (PrintDocument)sender;
-
-            // Indicate that all of the print pages have been provided
-            printDoc.AddPagesComplete();
+            OnStatusChanged(new PrintServiceEventArgs(message, level));
         }
 
         /// <summary>
@@ -284,13 +185,9 @@
             // XAML element that is used to represent to "printing page"
             FrameworkElement page;
 
-            // The link container for text overflowing in this page
-            RichTextBlockOverflow textLink;
-
-            // Check if this is the first page ( no previous RichTextBlockOverflow)
+            // Check if this is the first page
             if (lastOverflowAdded == null)
             {
-                // If this is the first page add the specific scenario content
                 page = _firstPage;
             }
             else
@@ -299,43 +196,15 @@
                 page = new PrintPage(lastOverflowAdded);
 
                 // Remove the duplicate OverflowContentTarget.
-                var duplicate = ((RichTextBlock)page.FindName("textContent"));
-                if (duplicate != null)
+                var textContent = ((RichTextBlock)page.FindName("textContent"));
+                if (textContent != null)
                 {
-                    duplicate.OverflowContentTarget = null;
+                    textContent.OverflowContentTarget = null;
                 }
             }
 
-            // Set paper width
-            page.Width = printPageDescription.PageSize.Width;
-            page.Height = printPageDescription.PageSize.Height;
-
-            var printableArea = (Grid)page.FindName("printableArea");
-
-            if (printableArea == null)
-            {
-                // Raise
-                // ...
-                return new RichTextBlockOverflow();
-            }
-
-            // Get the margins size
-            // If the ImageableRect is smaller than the app provided margins use the ImageableRect
-            double marginWidth = Math.Max(printPageDescription.PageSize.Width - printPageDescription.ImageableRect.Width, printPageDescription.PageSize.Width * _horizontalPrintMargin * 2);
-            double marginHeight = Math.Max(printPageDescription.PageSize.Height - printPageDescription.ImageableRect.Height, printPageDescription.PageSize.Height * _verticalPrintMargin * 2);
-
-            // Set-up "printable area" on the "paper"
-            printableArea.Width = page.Width - marginWidth;
-            printableArea.Height = page.Height - marginHeight;
-
-            // Add the (newly created) page to the printing root which is part of the visual tree and force it to go
-            // through layout so that the linked containers correctly distribute the content inside them.
-            PrintingRoot.Children.Add(page);
-            PrintingRoot.InvalidateMeasure();
-            PrintingRoot.UpdateLayout();
-
-            // Find the last text container and see if the content is overflowing
-            textLink = (RichTextBlockOverflow)page.FindName("continuationPageLinkedContainer");
+            // Set page size.
+            ApplyPrintPageDescription(printPageDescription, page);
 
             // Add title
             TextBlock titleTextBlock = (TextBlock)page.FindName("title");
@@ -355,7 +224,44 @@
             // Add the page to the page preview collection
             _printPreviewPages.Add(page);
 
+            // The link container for text overflowing in this page
+            var textLink = (RichTextBlockOverflow)page.FindName("continuationPageLinkedContainer");
             return textLink;
+        }
+
+        /// <summary>
+        /// Applies height and width of the printer page.
+        /// </summary>
+        private void ApplyPrintPageDescription(PrintPageDescription printPageDescription, FrameworkElement page)
+        {
+            // Set paper size
+            page.Width = printPageDescription.PageSize.Width;
+            page.Height = printPageDescription.PageSize.Height;
+
+            var printableArea = (Grid)page.FindName("printableArea");
+            if (printableArea == null)
+            {
+                return;
+            }
+
+            // Get the margins size
+            // If the ImageableRect is smaller than the app provided margins use the ImageableRect
+            var marginWidth = Math.Max(
+                printPageDescription.PageSize.Width - printPageDescription.ImageableRect.Width,
+                printPageDescription.PageSize.Width * _horizontalPrintMargin * 2);
+            var marginHeight = Math.Max(
+                printPageDescription.PageSize.Height - printPageDescription.ImageableRect.Height,
+                printPageDescription.PageSize.Height * _verticalPrintMargin * 2);
+
+            // Set-up "printable area" on the "paper"
+            printableArea.Width = page.Width - marginWidth;
+            printableArea.Height = page.Height - marginHeight;
+
+            // Add the (newly created) page to the printing root which is part of the visual tree and force it to go
+            // through layout so that the linked containers correctly distribute the content inside them.
+            PrintingRoot.Children.Add(page);
+            PrintingRoot.InvalidateMeasure();
+            PrintingRoot.UpdateLayout();
         }
 
         /// <summary>

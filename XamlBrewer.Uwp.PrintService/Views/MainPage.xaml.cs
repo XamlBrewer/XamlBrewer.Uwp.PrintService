@@ -1,8 +1,9 @@
 ﻿using Mvvm;
 using Mvvm.Services.Printing;
-using System.Diagnostics;
+using System.Diagnostics.Tracing;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using Mvvm.Services;
 
 namespace XamlBrewer.Uwp.PrintService
 {
@@ -28,7 +29,16 @@ namespace XamlBrewer.Uwp.PrintService
 
         private void PrintServiceProvider_StatusChanged(object sender, PrintServiceEventArgs e)
         {
-            Debug.WriteLine("PrintService: " + e.Message);
+            switch (e.Level)
+            {
+                case EventLevel.Informational:
+                    Log.Info(e.Message);
+                    break;
+                default:
+                    Log.Error(e.Message);
+                    Toast.Show(e.Message, "ms-appx:///Assets/Toasts/Printer.png");
+                    break;
+            }
         }
 
         private void Print_Executed()
@@ -40,7 +50,7 @@ namespace XamlBrewer.Uwp.PrintService
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             (DataContext as ViewModelBase)?.Menu.Add(_printItem);
-         
+
             base.OnNavigatedTo(e);
         }
 

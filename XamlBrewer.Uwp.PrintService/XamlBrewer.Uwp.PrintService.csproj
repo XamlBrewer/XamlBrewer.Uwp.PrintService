@@ -99,11 +99,14 @@
     <Compile Include="Models\TypeModel.cs" />
     <Compile Include="Mvvm\BindableBase.cs" />
     <Compile Include="Mvvm\DelegateCommand.cs" />
+    <Compile Include="Services\Logging\Log.cs" />
+    <Compile Include="Services\Notification\Toast.cs" />
     <Compile Include="Services\Printing\PrintPage.xaml.cs">
-        <DependentUpon>PrintPage.xaml</DependentUpon>
+      <DependentUpon>PrintPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Services\Printing\PrintServiceEventArgs.cs" />
-    <Compile Include="Services\Printing\PrintServiceProvider.cs" />
+    <Compile Include="Services\Printing\PrintServiceProvider.Contracts.cs" />
+    <Compile Include="Services\Printing\PrintServiceProvider.Core.cs" />
     <Compile Include="Services\Theming\Theme.cs" />
     <Compile Include="Models\CharacterModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
@@ -118,7 +121,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\Shell.xaml.cs">
-        <DependentUpon>Shell.xaml</DependentUpon>
+      <DependentUpon>Shell.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +145,10 @@
     <Content Include="Assets\Characters\scapino.jpg" />
     <Content Include="Assets\Characters\scaramouche.jpg" />
     <Content Include="Assets\Characters\tartaglia.jpg" />
+    <Content Include="Assets\Toasts\Confused.png" />
+    <Content Include="Assets\Toasts\Printer.png" />
+    <Content Include="Assets\Toasts\Wink.png" />
+    <Content Include="Assets\Toasts\Worried.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

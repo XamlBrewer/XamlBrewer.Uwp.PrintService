@@ -18,7 +18,7 @@ namespace XamlBrewer.Uwp.PrintService.Models
         {
             get
             {
-                return new BitmapImage(new Uri("ms-appx:///" + this.ImagePath));
+                return new BitmapImage(new Uri("ms-appx:///" + ImagePath));
             }
         }
     }
