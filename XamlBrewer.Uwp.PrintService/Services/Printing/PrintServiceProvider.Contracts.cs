@@ -47,9 +47,7 @@ namespace Mvvm.Services.Printing
         /// </summary>
         private void PrintDocument_Paginate(object sender, PaginateEventArgs e)
         {
-            // PreparePrintContent();
-
-            // Clear the cache of preview pages
+            // Clear the cache of preview pages.
             _printPreviewPages.Clear();
             _pageNumber = 0;
 
@@ -57,7 +55,8 @@ namespace Mvvm.Services.Printing
             PrintingRoot.Children.Clear();
 
             // Get the page description to determine how big the page is
-            PrintPageDescription pageDescription = e.PrintTaskOptions.GetPageDescription(0);
+            var pageDescription = e.PrintTaskOptions.GetPageDescription(0);
+            OnStatusChanged("Detected pagesize: width = " + pageDescription.PageSize.Width + ", height = " + pageDescription.PageSize.Height);
 
             var lastOverflow = AddOnePrintPreviewPage(null, pageDescription);
             while (lastOverflow.HasOverflowContent && lastOverflow.Visibility == Visibility.Visible)

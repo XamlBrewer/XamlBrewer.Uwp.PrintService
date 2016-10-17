@@ -235,6 +235,7 @@ namespace Mvvm.Services.Printing
             // Set-up the printable area on the paper.
             page.PrintableArea.Width = page.Width - marginWidth;
             page.PrintableArea.Height = page.Height - marginHeight;
+            OnStatusChanged("Printable area: width = " + page.PrintableArea.Width + ", height = " + page.PrintableArea.Height);
 
             // Add the page to the printing root which is part of the visual tree.
             // Force it to go through layout so that the overflow correctly distribute the content inside them.
