@@ -53,21 +53,13 @@ namespace Mvvm.Services.Printing
             _printPreviewPages.Clear();
             _pageNumber = 0;
 
-            // Clear the printing root of preview pages
+            // Clear the printing root.
             PrintingRoot.Children.Clear();
 
             // Get the page description to determine how big the page is
             PrintPageDescription pageDescription = e.PrintTaskOptions.GetPageDescription(0);
 
-            // This variable keeps track of the last RichTextBlockOverflow element that was added to a page which will be printed
-            // We know there is at least one page to be printed. passing null as the first parameter to
-            // AddOnePrintPreviewPage tells the function to add the first page.
-            // RichTextBlockOverflow flow = _firstPage.
-
             var lastOverflow = AddOnePrintPreviewPage(null, pageDescription);
-
-            // We know there are more pages to be added as long as the last RichTextBoxOverflow added to a print preview
-            // page has extra content
             while (lastOverflow.HasOverflowContent && lastOverflow.Visibility == Visibility.Visible)
             {
                 lastOverflow = AddOnePrintPreviewPage(lastOverflow, pageDescription);
@@ -97,7 +89,6 @@ namespace Mvvm.Services.Printing
             // Add each preview page to the print document.
             foreach (var previewPage in _printPreviewPages)
             {
-                // We should have all pages ready at this point.
                 printDoc.AddPage(previewPage);
             }
 

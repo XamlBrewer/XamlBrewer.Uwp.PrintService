@@ -29,7 +29,7 @@ namespace XamlBrewer.Uwp.PrintService
 
         private void PrintServiceProvider_StatusChanged(object sender, PrintServiceEventArgs e)
         {
-            switch (e.Level)
+            switch (e.Severity)
             {
                 case EventLevel.Informational:
                     Log.Info(e.Message);

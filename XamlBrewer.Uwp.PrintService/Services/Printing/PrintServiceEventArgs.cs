@@ -12,7 +12,7 @@ namespace Mvvm.Services.Printing
         public PrintServiceEventArgs(string message, EventLevel level)
         {
             Message = message;
-            Level = level;
+            Severity = level;
         }
 
         public PrintServiceEventArgs(string message) : this(message, EventLevel.Informational)
@@ -25,8 +25,8 @@ namespace Mvvm.Services.Printing
         public string Message { get; set; }
 
         /// <summary>
-        /// The level of the message.
+        /// The severity level of the message.
         /// </summary>
-        public EventLevel Level { get; set; }
+        public EventLevel Severity { get; set; }
     }
 }

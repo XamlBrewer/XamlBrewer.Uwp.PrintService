@@ -39,7 +39,7 @@
                        FontSize="18"
                        Grid.Row="1"
                        Grid.ColumnSpan="2"
-                       OverflowContentTarget="{Binding ElementName=continuationPageLinkedContainer}"
+                       OverflowContentTarget="{Binding ElementName=textOverflow}"
                        IsTextSelectionEnabled="True"
                        TextAlignment="Left"
                        FontFamily="Segoe UI"
@@ -47,7 +47,7 @@
                        HorizontalAlignment="Left">
         </RichTextBlock>
 
-        <RichTextBlockOverflow x:Name="continuationPageLinkedContainer"
+        <RichTextBlockOverflow x:Name="textOverflow"
                                Grid.Row="2" />
 
         <!-- Footer -->

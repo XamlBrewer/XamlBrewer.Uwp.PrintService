@@ -16,8 +16,14 @@ namespace Mvvm.Services.Printing
             : this()
         {
             if (textLinkContainer == null) throw new ArgumentNullException(nameof(textLinkContainer));
-            textLinkContainer.OverflowContentTarget = continuationPageLinkedContainer;
+            textLinkContainer.OverflowContentTarget = textOverflow;
         }
+
+        internal Grid PrintableArea => printableArea;
+
+        internal RichTextBlock TextContent => textContent;
+
+        internal RichTextBlockOverflow TextOverflow => textOverflow;
 
         internal void AddContent(Paragraph block)
         {
