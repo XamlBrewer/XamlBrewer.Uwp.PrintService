@@ -5,7 +5,7 @@ namespace Mvvm.Services.Printing
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Documents;
 
-    public sealed partial class PrintPage
+    public partial class PrintPage
     {
         public PrintPage()
         {
