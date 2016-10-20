@@ -51,7 +51,7 @@ namespace Mvvm.Services.Printing
         /// <summary>
         /// The first page in the printing-content series. It hosts all the rendered paragraphs.
         /// </summary>
-        private PrintPage _firstPage;
+        private PrintPage _firstPrintPage;
 
         /// <summary>
         /// Exposes status information to the subscriber.
@@ -74,6 +74,11 @@ namespace Mvvm.Services.Printing
         public void RegisterForPrinting(Page sourcePage, Type printPageType, object viewModel)
         {
             _callingPage = sourcePage;
+
+            if (!PrintManager.IsSupported())
+            {
+                OnStatusChanged("Sorry, printing is not supported on this device.", EventLevel.Error);
+            }
 
             if (PrintingRoot == null)
             {
@@ -124,7 +129,7 @@ namespace Mvvm.Services.Printing
             _printDocument.GetPreviewPage -= PrintDocument_GetPrintPreviewPage;
             _printDocument.AddPages -= PrintDocument_AddPages;
 
-            PrintManager printManager = PrintManager.GetForCurrentView();
+            var printManager = PrintManager.GetForCurrentView();
             printManager.PrintTaskRequested -= PrintManager_PrintTaskRequested;
 
             PrintingRoot.Children.Clear();
@@ -169,31 +174,31 @@ namespace Mvvm.Services.Printing
         }
 
         /// <summary>
-        /// Creates a print preview page and adds it to the internal cache.
+        /// Creates a print preview page and adds it to the internal list.
         /// </summary>
         private RichTextBlockOverflow AddOnePrintPreviewPage(RichTextBlockOverflow lastOverflowAdded, PrintPageDescription printPageDescription)
         {
-            PrintPage page;
+            PrintPage printPage;
 
             // Check if this is the first page.
             if (lastOverflowAdded == null)
             {
-                page = _firstPage;
+                printPage = _firstPrintPage;
             }
             else
             {
                 // Flow content from previous pages.
-                page = new PrintPage(lastOverflowAdded);
+                printPage = new PrintPage(lastOverflowAdded);
 
                 // Remove the duplicate OverflowContentTarget.
-                page.TextContent.OverflowContentTarget = null;
+                printPage.TextContent.OverflowContentTarget = null;
             }
 
             // Set page size.
-            ApplyPrintPageDescription(printPageDescription, page);
+            ApplyPrintPageDescription(printPageDescription, printPage);
 
             // Add title.
-            TextBlock titleTextBlock = (TextBlock)page.FindName("title");
+            var titleTextBlock = (TextBlock)printPage.FindName("title");
             if (titleTextBlock != null)
             {
                 titleTextBlock.Text = Title;
@@ -201,30 +206,30 @@ namespace Mvvm.Services.Printing
 
             // Add page number
             _pageNumber += 1;
-            TextBlock pageNumberTextBlock = (TextBlock)page.FindName("pageNumber");
+            var pageNumberTextBlock = (TextBlock)printPage.FindName("pageNumber");
             if (pageNumberTextBlock != null)
             {
                 pageNumberTextBlock.Text = string.Format("- {0} -", _pageNumber);
             }
 
             // Add the page to the page preview collection
-            _printPreviewPages.Add(page);
+            _printPreviewPages.Add(printPage);
 
             // The link container for text overflowing in this page
-            return page.TextOverflow;
+            return printPage.TextOverflow;
         }
 
         /// <summary>
         /// Applies height and width of the printer page.
         /// </summary>
-        private void ApplyPrintPageDescription(PrintPageDescription printPageDescription, PrintPage page)
+        private void ApplyPrintPageDescription(PrintPageDescription printPageDescription, PrintPage printPage)
         {
             // Set paper size
-            page.Width = printPageDescription.PageSize.Width;
-            page.Height = printPageDescription.PageSize.Height;
+            printPage.Width = printPageDescription.PageSize.Width;
+            printPage.Height = printPageDescription.PageSize.Height;
 
             // Get the margins size
-            // If the ImageableRect is smaller than the app provided margins use the ImageableRect
+            // If the ImageableRect is smaller than the app provided margins use the ImageableRect.
             var marginWidth = Math.Max(
                 printPageDescription.PageSize.Width - printPageDescription.ImageableRect.Width,
                 printPageDescription.PageSize.Width * _horizontalPrintMargin * 2);
@@ -233,13 +238,13 @@ namespace Mvvm.Services.Printing
                 printPageDescription.PageSize.Height * _verticalPrintMargin * 2);
 
             // Set-up the printable area on the paper.
-            page.PrintableArea.Width = page.Width - marginWidth;
-            page.PrintableArea.Height = page.Height - marginHeight;
-            OnStatusChanged("Printable area: width = " + page.PrintableArea.Width + ", height = " + page.PrintableArea.Height);
+            printPage.PrintableArea.Width = printPage.Width - marginWidth;
+            printPage.PrintableArea.Height = printPage.Height - marginHeight;
+            OnStatusChanged("Printable area: width = " + printPage.PrintableArea.Width + ", height = " + printPage.PrintableArea.Height);
 
             // Add the page to the printing root which is part of the visual tree.
             // Force it to go through layout so that the overflow correctly distribute the content inside them.
-            PrintingRoot.Children.Add(page);
+            PrintingRoot.Children.Add(printPage);
             PrintingRoot.InvalidateMeasure();
             PrintingRoot.UpdateLayout();
         }
@@ -250,32 +255,33 @@ namespace Mvvm.Services.Printing
         private void PreparePrintContent()
         {
             // Create and populate print page.
-            var printPage = Activator.CreateInstance(_printPageType) as Page;
-            if (printPage == null)
+            var userPrintPage = Activator.CreateInstance(_printPageType) as Page;
+            if (userPrintPage == null)
             {
-                OnStatusChanged("Configuration error: print page type is not a PrintPage subclass", EventLevel.Error);
+                OnStatusChanged("Configuration error: print page type is not a Page subclass", EventLevel.Error);
                 return;
             }
 
-            printPage.DataContext = DataContext;
+            // Apply DataContext.
+            userPrintPage.DataContext = DataContext;
 
             // Create print template page and fill invisible textblock with empty paragraph.
-            // This pushes all real content into the overflow.
-            _firstPage = new PrintPage();
-            _firstPage.AddContent(new Paragraph());
+            // This will push all 'real' content into the overflow.
+            _firstPrintPage = new PrintPage();
+            _firstPrintPage.AddContent(new Paragraph());
 
-            // Move content from print page to print template - paragraph by paragraph.
-            var printPageRtb = printPage.Content as RichTextBlock;
-            if (printPageRtb == null)
+            // Flatten content from user print page to a list of paragraphs, and move these to the print template.
+            var userPrintPageContent = userPrintPage.Content as RichTextBlock;
+            if (userPrintPageContent == null)
             {
                 OnStatusChanged("Configuration error: print page's main panel is not a RichTextBlock.", EventLevel.Error);
                 return;
             }
 
-            while (printPageRtb.Blocks.Count > 0)
+            while (userPrintPageContent.Blocks.Count > 0)
             {
-                var paragraph = printPageRtb.Blocks.First() as Paragraph;
-                printPageRtb.Blocks.Remove(paragraph);
+                var paragraph = userPrintPageContent.Blocks.First() as Paragraph;
+                userPrintPageContent.Blocks.Remove(paragraph);
 
                 var container = paragraph.Inlines[0] as InlineUIContainer;
                 if (container != null)
@@ -283,7 +289,7 @@ namespace Mvvm.Services.Printing
                     var itemsControl = container.Child as ItemsControl;
                     if (itemsControl?.Items != null)
                     {
-                        // Render the paragraph. Just to read the ItemsSource.
+                        // Render the paragraph (only to read the ItemsSource).
                         Render(paragraph);
 
                         // Transform each item to a paragraph, render separately, and add to the page.
@@ -297,7 +303,7 @@ namespace Mvvm.Services.Printing
                             inlineContainer.Child = element;
                             itemParagraph.Inlines.Add(inlineContainer);
                             itemParagraph.LineHeight = Render(itemParagraph);
-                            _firstPage.AddContent(itemParagraph);
+                            _firstPrintPage.AddContent(itemParagraph);
                         }
                     }
                     else
@@ -308,18 +314,18 @@ namespace Mvvm.Services.Printing
                         // Apply line height to trigger overflow.
                         paragraph.LineHeight = actualHeight;
 
-                        _firstPage.AddContent(paragraph);
+                        _firstPrintPage.AddContent(paragraph);
                     }
                 }
                 else
                 {
-                    _firstPage.AddContent(paragraph);
+                    _firstPrintPage.AddContent(paragraph);
                 }
             }
 
             // Send it to the printing root.
             PrintingRoot.Children.Clear();
-            PrintingRoot.Children.Add(_firstPage);
+            PrintingRoot.Children.Add(_firstPrintPage);
         }
 
         // Renders a single paragraph.
