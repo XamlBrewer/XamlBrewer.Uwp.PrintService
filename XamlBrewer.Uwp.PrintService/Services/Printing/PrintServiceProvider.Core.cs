@@ -160,6 +160,36 @@ namespace Mvvm.Services.Printing
         /// </summary>
         protected virtual void OnStatusChanged(PrintServiceEventArgs e)
         {
+            switch (e.Severity)
+            {
+                case EventLevel.Critical:
+                    StatusChanged?.Invoke(this, e);
+                    break;
+                case EventLevel.Error:
+                    StatusChanged?.Invoke(this, e);
+                    break;
+                case EventLevel.Informational:
+#if DEBUG
+                    StatusChanged?.Invoke(this, e);
+#endif
+                    break;
+                case EventLevel.LogAlways:
+#if DEBUG
+                    StatusChanged?.Invoke(this, e);
+#endif
+                    break;
+                case EventLevel.Verbose:
+#if DEBUG
+                    StatusChanged?.Invoke(this, e);
+#endif
+                    break;
+                case EventLevel.Warning:
+                    StatusChanged?.Invoke(this, e);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
             StatusChanged?.Invoke(this, e);
         }
 
@@ -323,6 +353,8 @@ namespace Mvvm.Services.Printing
                 }
             }
 
+            OnStatusChanged("Prepared " + _firstPrintPage.TextContent.Blocks.Count + " paragraphs.");
+
             // Send it to the printing root.
             PrintingRoot.Children.Clear();
             PrintingRoot.Children.Add(_firstPrintPage);
@@ -331,6 +363,7 @@ namespace Mvvm.Services.Printing
         // Renders a single paragraph.
         private double Render(Paragraph paragraph)
         {
+            var currentHeight = paragraph.LineHeight;
             var blockToMeasure = new RichTextBlock();
             blockToMeasure.Blocks.Add(paragraph);
             PrintingRoot.Children.Clear();
@@ -338,8 +371,10 @@ namespace Mvvm.Services.Printing
             PrintingRoot.InvalidateMeasure();
             PrintingRoot.UpdateLayout();
             blockToMeasure.Blocks.Clear();
+            var newHeight = blockToMeasure.ActualHeight;
+            OnStatusChanged(string.Format("Rendered paragraph height moved from {0} to {1}.", currentHeight, newHeight));
 
-            return blockToMeasure.ActualHeight;
+            return newHeight;
         }
     }
 }
