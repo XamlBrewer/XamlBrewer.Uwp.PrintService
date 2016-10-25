@@ -372,7 +372,7 @@ namespace Mvvm.Services.Printing
             PrintingRoot.UpdateLayout();
             blockToMeasure.Blocks.Clear();
             var newHeight = blockToMeasure.ActualHeight;
-            OnStatusChanged(string.Format("Rendered paragraph height moved from {0} to {1}.", currentHeight, newHeight));
+            OnStatusChanged(string.Format("Rendered paragraph height updated from {0} to {1}.", currentHeight, newHeight));
 
             return newHeight;
         }
